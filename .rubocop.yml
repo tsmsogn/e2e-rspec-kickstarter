@@ -7,7 +7,9 @@ AllCops:
     - 'tmp/**/*' 
     - 'vendor/**/*'
     - 'Guardfile'
-  RunRailsCops: true
+
+Rails:
+  Enabled: true
 
 AsciiComments:
   Enabled: false
