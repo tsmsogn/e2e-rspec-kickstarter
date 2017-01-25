@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'nokogiri'
 require 'open-uri'
 require 'rdoc'
