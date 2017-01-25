@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+#
+# e2e-rspec-kickstarter [url]
+#
+
+require 'optparse'
+require 'e2e_rspec_kickstarter/version'
+require 'e2e_rspec_kickstarter/generator'
+print_version = false
+force_write = false
+dry_run = false
+output = './spec/features/pages_spec.rb'
+test_path = nil
+scenario_path = nil
+spec_path = nil
+
+opt = OptionParser.new
+opt.on('-f', '--force', 'Create if absent or append to the existing spec') { |_| force_write = true }
+opt.on('-n', '--dry-run', 'Dry run mode (shows generated code to console)') { |_| dry_run = true }
+opt.on('-o VAL', '--output VAL', 'Output file (default: ./spec/features/pages_spec.rb)') { |output| output = output }
+opt.on('--test-template VAL', 'Test template path') { |path| test_path = path }
+opt.on('--scenario-template VAL', 'Scenario template path') { |path| scenario_path = path }
+opt.on('--spec-template VAL', 'Spec template path') { |path| spec_path = path }
+opt.on('-v', '--version', 'Print version') { |_| print_version = true }
+
+args = opt.parse(ARGV)
+
+if print_version
+  puts "e2e-rspec-kickstarter #{E2eRSpecKickstarter::VERSION}"
+  exit 0
+end
+
+url = args.first
+if url.nil?
+  puts "Usage: e2e-rspec-kickstarter [url] -options"
+  exit 1
+end
+
+test_template = nil
+if ! test_path.nil? 
+  if File.exist?(test_path)
+    test_template = File.read(test_path)
+  else
+    puts "'#{test_path}' is not found."
+    exit 1
+  end
+end
+scenario_template = nil
+if ! scenario_path.nil? 
+  if File.exist?(scenario_path)
+    scenario_template = File.read(scenario_path)
+  else
+    puts "'#{scenario_path}' is not found."
+    exit 1
+  end
+end
+spec_template = nil
+if ! spec_path.nil? 
+  if File.exist?(spec_path)
+    spec_template = File.read(spec_path)
+  else
+    puts "'#{spec_path}' is not found."
+    exit 1
+  end
+end
+
+generator = E2eRSpecKickstarter::Generator.new(test_template, scenario_template, spec_template)
+generator.write_spec(url, output, force_write, dry_run)

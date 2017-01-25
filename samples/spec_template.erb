@@ -1,0 +1,8 @@
+# Spec template example
+require 'spec_helper'
+
+describe 'pages', type: :feature do
+
+<%= ERB.new(@scenario_template, nil, '-', 'scenario').result(binding) -%>
+
+end

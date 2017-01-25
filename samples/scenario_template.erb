@@ -1,0 +1,6 @@
+  # Scenario template example
+  describe '<%= url %>' do
+    before { visit '<%= url %>' }
+
+<%= ERB.new(@test_template, nil, '-', 'test').result(binding) -%>
+  end
