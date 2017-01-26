@@ -33,8 +33,13 @@ describe E2eRSpecKickstarter::Generator do
 
       code = <<CODE
 require 'spec_helper'
+require 'capybara/rspec'
 
 describe 'pages', type: :feature do
+  before do
+    Capybara.current_driver = :selenium
+    Capybara.run_server = false
+  end
 
   describe 'http://example.com/' do
     before { visit 'http://example.com/' }

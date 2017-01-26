@@ -1,7 +1,12 @@
 # Spec template example
 require 'spec_helper'
+require 'capybara/rspec'
 
 describe 'pages', type: :feature do
+  before do
+    Capybara.current_driver = :selenium
+    Capybara.run_server = false
+  end
 
 <%= ERB.new(@scenario_template, nil, '-', 'scenario').result(binding) -%>
 

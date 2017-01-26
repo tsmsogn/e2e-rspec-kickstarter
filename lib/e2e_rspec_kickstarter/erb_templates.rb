@@ -21,8 +21,13 @@ SPEC
 
     BASIC_NEW_SPEC_TEMPLATE = <<SPEC
 require 'spec_helper'
+require 'capybara/rspec'
 
 describe 'pages', type: :feature do
+  before do
+    Capybara.current_driver = :selenium
+    Capybara.run_server = false
+  end
 
 <%= ERB.new(BASIC_SCENARIO_PART_TEMPLATE, nil, '-', 'scenario').result(binding) -%>
 
