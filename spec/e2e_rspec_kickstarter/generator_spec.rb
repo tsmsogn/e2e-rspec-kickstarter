@@ -32,7 +32,7 @@ describe E2eRSpecKickstarter::Generator do
 
   describe '#raw_html' do
 
-    it 'raise error with invalid url' do
+    it 'raises error with invalid url' do
       expect { generator.raw_html('') }.to raise_error
     end
 
