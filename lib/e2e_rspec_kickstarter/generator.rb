@@ -5,6 +5,7 @@ require 'rdoc'
 require 'e2e_rspec_kickstarter'
 require 'e2e_rspec_kickstarter/erb_factory'
 require 'e2e_rspec_kickstarter/erb_templates'
+require 'typhoeus'
 
 #
 # RSpec Code Generator
