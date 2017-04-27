@@ -1,11 +1,17 @@
 require 'spec_helper'
 require 'e2e_rspec_kickstarter/generator'
+require 'typhoeus'
 
 describe E2eRSpecKickstarter::Generator do
 
   let(:generator) { E2eRSpecKickstarter::Generator.new }
   let(:url) { 'http://example.com/' }
   let(:output) { './tmp/pages_spec.rb' }
+
+  before do
+    response = Typhoeus::Response.new(code: 200, body: '<html><head><title>Example Domain</title></head></html>')
+    Typhoeus.stub(url).and_return(response)
+  end
 
   describe '#new' do
 
@@ -21,6 +27,17 @@ describe E2eRSpecKickstarter::Generator do
 
       result = E2eRSpecKickstarter::Generator.new(test_template, scenario_template, spec_template)
       expect(result).not_to be_nil
+    end
+  end
+
+  describe '#raw_html' do
+
+    it 'raise error with invalid url' do
+      expect { generator.raw_html('') }.to raise_error
+    end
+
+    it 'works with valid url' do
+      expect(generator.raw_html(url)).to match 'Example Domain'
     end
   end
 
