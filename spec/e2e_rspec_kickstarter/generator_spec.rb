@@ -30,6 +30,17 @@ describe E2eRSpecKickstarter::Generator do
     end
   end
 
+  describe '#raw_html' do
+
+    it 'raise error with invalid url' do
+      expect { generator.raw_html('') }.to raise_error
+    end
+
+    it 'works with valid url' do
+      expect(generator.raw_html(url)).to match 'Example Domain'
+    end
+  end
+
   describe '#write_spec' do
 
     it 'just works' do
