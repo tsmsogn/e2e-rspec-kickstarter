@@ -21,6 +21,18 @@ module E2eRSpecKickstarter
       @spec_template = spec_template
     end
 
+    def raw_html(url)
+      request = Typhoeus::Request.new(url, followlocation: true)
+      request.on_complete do |response|
+        if response.success?
+          return response.body
+        else
+          raise "HTTP request to #{url} failed"
+        end
+      end
+      request.run
+    end
+
     #
     # Writes new spec or appends to the existing spec.
     #
@@ -37,7 +49,7 @@ module E2eRSpecKickstarter
     #
     # rubocop:disable Metrics/AbcSize
     def create_new_spec(url, output, dry_run)
-      html_doc = Nokogiri::HTML(open(url))
+      html_doc = Nokogiri::HTML(raw_html(url))
 
       erb = E2eRSpecKickstarter::ERBFactory.new(@spec_template).get_instance_for_new_spec
       code = erb.result(binding)
@@ -63,7 +75,7 @@ module E2eRSpecKickstarter
     #
     # rubocop:disable Metrics/AbcSize
     def append_to_existing_spec(url, output, dry_run)
-      html_doc = Nokogiri::HTML(open(url))
+      html_doc = Nokogiri::HTML(raw_html(url))
 
       erb = E2eRSpecKickstarter::ERBFactory.new(@scenario_template).get_instance_for_appending
       additional_spec = erb.result(binding)

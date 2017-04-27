@@ -1,11 +1,17 @@
 require 'spec_helper'
 require 'e2e_rspec_kickstarter/generator'
+require 'typhoeus'
 
 describe E2eRSpecKickstarter::Generator do
 
   let(:generator) { E2eRSpecKickstarter::Generator.new }
   let(:url) { 'http://example.com/' }
   let(:output) { './tmp/pages_spec.rb' }
+
+  before do
+    response = Typhoeus::Response.new(code: 200, body: '<html><head><title>Example Domain</title></head></html>')
+    Typhoeus.stub(url).and_return(response)
+  end
 
   describe '#new' do
 
